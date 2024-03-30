@@ -1,0 +1,60 @@
+<nav class="navbar navbar-expand bg-white ">
+    <div class="container position-relative">
+        <div class=" w-100 d-flex flex-column gap-3 flex-sm-row justify-content-between align-items-center">
+            <a class="navbar-brand" routerLink="home">Clients</a>
+            <input #search type="search" id="search" class="hoverInput" placeholder="Search by user id..." (input)="searchById(search)" />
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li class="nav-item ">
+                    <a class="nav-link" routerLink="/home">Home</a>
+                </li>
+            </ul>
+
+
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row gy-4 g-md-4" *ngIf="usersData?.length > 0 else error">
+
+        <div class=" col-sm-6 col-md-4 col-lg-3" *ngFor="let user of usersData">
+            <div class="userCard text-center pointer" [routerLink]="['/userdetails', user.id]"
+                routerLinkActive="router-link-active">
+                <div class="card">
+                    <header>
+                        <div class="avatar">
+                            <img [src]="user.avatar" [alt]="'image of' + user.first_name">
+                        </div>
+                    </header>
+                    <h3>{{user.first_name}}</h3>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <nav class="pageNav mt-5" aria-label="Page navigation example" *ngIf="usersData?.length > 5">
+        <ul class="pagination mx-auto">
+            <button class="btn pagination-item" (click)="getUsersByPage(currentPage-1)" type="button"
+                [disabled]="currentPage == 1">
+                <a class="pagination-link">
+                    <span>&laquo;</span>
+                </a>
+            </button>
+            <li class="pagination-item" [ngClass]="{'active-page': currentPage == page}" (click)="getUsersByPage(page)"
+                *ngFor="let page of numberOfPages"><a class="pagination-link">{{page}}</a></li>
+
+            <button class="btn pagination-item" (click)="getUsersByPage(currentPage+1)" type="button"
+                [disabled]="currentPage == numberOfPages.length">
+                <a class="pagination-link">
+                    <span>&raquo;</span>
+                </a>
+            </button>
+        </ul>
+    </nav>
+</div>
+
+<ng-template #error>
+    <div class="text-center d-flex flex-column justify-content-center align-content-center">
+        <h6 class="h1">User ID Not Found ... </h6>
+    </div>
+</ng-template>
